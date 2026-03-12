@@ -14,10 +14,12 @@
 #   .\scripts\smoke.ps1 -Faction soviet                          # play as Soviet
 #   .\scripts\smoke.ps1 -Faction allied                          # play as Allied
 #   .\scripts\smoke.ps1 -Script my_bot.py                        # use a different entry script
+#   .\scripts\smoke.ps1 -Mod cnc                                   # use a different mod
 #   .\scripts\smoke.ps1 -Image ghcr.io/tymsky/airena-openra-headless:latest
 
 [CmdletBinding()]
 param(
+    [string]$Mod,
     [string]$Image,
     [string]$Map,
     [int]$Ticks = 0,
@@ -35,6 +37,7 @@ $BotRoot = (Resolve-Path "$PSScriptRoot\..").Path
 # ---------- Load runtime config ----------
 $runtimeConfigPath = "$BotRoot\airena.runtime.json"
 $cfg = @{
+    mod             = "ra"
     image           = "ghcr.io/tymsky/airena-openra-headless:latest"
     map             = "a-nuclear-winter"
     ticks           = 6000
@@ -45,6 +48,7 @@ $cfg = @{
 
 if (Test-Path $runtimeConfigPath) {
     $fileCfg = Get-Content $runtimeConfigPath -Raw | ConvertFrom-Json
+    if ($fileCfg.mod)             { $cfg.mod             = $fileCfg.mod }
     if ($fileCfg.image)           { $cfg.image           = $fileCfg.image }
     if ($fileCfg.map)             { $cfg.map             = $fileCfg.map }
     if ($fileCfg.ticks)           { $cfg.ticks           = $fileCfg.ticks }
@@ -54,6 +58,7 @@ if (Test-Path $runtimeConfigPath) {
 }
 
 # CLI parameters override config file
+if ($Mod)                      { $cfg.mod             = $Mod }
 if ($Image)                    { $cfg.image           = $Image }
 if ($Map)                      { $cfg.map             = $Map }
 if ($Ticks -gt 0)              { $cfg.ticks           = $Ticks }
@@ -109,6 +114,7 @@ Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host " AiRENA Smoke Test (Headless/Docker)"   -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "[INFO] Mod:      $($cfg.mod)"
 Write-Host "[INFO] Image:    $($cfg.image)"
 Write-Host "[INFO] Map:      $($cfg.map)"
 Write-Host "[INFO] Ticks:    $($cfg.ticks)"
@@ -138,6 +144,7 @@ docker run --rm `
     -v "${dockerOutDir}:/artifacts/${matchId}" `
     $cfg.image `
     --match-id $matchId `
+    --mod $cfg.mod `
     --map $cfg.map `
     --ticks $cfg.ticks `
     --ai-type $cfg.opponent_ai `

@@ -1,5 +1,6 @@
 {
   "$comment": "Runtime configuration for smoke tests and bot-vs-bot matches.",
+  "mod": "ra",
   "image": "ghcr.io/tymsky/airena-openra-headless:latest",
   "map": "a-nuclear-winter",
   "ticks": 6000,

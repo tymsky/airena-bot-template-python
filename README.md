@@ -2,7 +2,8 @@
 
 [![PyPI](https://img.shields.io/pypi/v/airena-sdk?label=airena-sdk)](https://pypi.org/project/airena-sdk/)
 
-Starter template for building an AiRENA / OpenRA RA bot in Python.
+Starter template for building an AiRENA / OpenRA bot in Python.
+Supports mods: **ra** (Red Alert), **cnc** (Command & Conquer), **ts** (Tiberian Sun), **d2k** (Dune 2000). Default: `ra`.
 
 ## Prerequisites
 
@@ -55,6 +56,16 @@ installs dependencies, runs a full headless match, and writes artifacts to `arti
 
 Edit `main.py` — implement your strategy in `handle_tick()`.
 
+This template defaults to the **ra** (Red Alert) mod. To switch mods, change `mod` in
+`airena.runtime.json` and update the import in `main.py`:
+
+```python
+from airena_sdk.mods import cnc   # Command & Conquer
+from airena_sdk.mods import d2k   # Dune 2000
+```
+
+> **Note:** `ts` (Tiberian Sun) is supported by the runtime but does not have SDK mod constants yet.
+
 The SDK (`airena-sdk`) is pre-installed in the runtime Docker image.
 If your bot needs additional Python packages, add them to `requirements.txt` —
 the runtime installs them automatically at container startup.
@@ -105,10 +116,12 @@ Runtime settings live in `airena.runtime.json`:
 
 | Field             | Default                                              | Description                           |
 |-------------------|------------------------------------------------------|---------------------------------------|
+| `mod`             | `ra`                                                 | Game mod: `ra`, `cnc`, `ts`, or `d2k` |
 | `image`           | `ghcr.io/tymsky/airena-openra-headless:latest`      | Docker image for the runner           |
 | `map`             | `a-nuclear-winter`                                   | Map name                              |
 | `ticks`           | `6000`                                               | Engine tick limit                     |
 | `opponent_ai`     | `normal`                                             | Opponent AI type                      |
+| `bot_faction`     | `""`                                                 | Player faction (random if empty)      |
 | `timeout_seconds` | `300`                                                | Container timeout                     |
 
 ## Development loop

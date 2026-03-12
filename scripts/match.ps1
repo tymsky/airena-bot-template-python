@@ -20,6 +20,7 @@ param(
     [Parameter(Mandatory=$true)]
     [string]$Bot2,
 
+    [string]$Mod,
     [string]$Image,
     [string]$Map,
     [int]$Ticks = 0,
@@ -56,6 +57,7 @@ $Bot2 = (Resolve-Path $Bot2).Path
 # ---------- Load runtime config ----------
 $runtimeConfigPath = "$BotRoot\airena.runtime.json"
 $cfg = @{
+    mod             = "ra"
     image           = "ghcr.io/tymsky/airena-openra-headless:latest"
     map             = "a-nuclear-winter"
     ticks           = 6000
@@ -65,6 +67,7 @@ $cfg = @{
 
 if (Test-Path $runtimeConfigPath) {
     $fileCfg = Get-Content $runtimeConfigPath -Raw | ConvertFrom-Json
+    if ($fileCfg.mod)             { $cfg.mod             = $fileCfg.mod }
     if ($fileCfg.image)           { $cfg.image           = $fileCfg.image }
     if ($fileCfg.map)             { $cfg.map             = $fileCfg.map }
     if ($fileCfg.ticks)           { $cfg.ticks           = $fileCfg.ticks }
@@ -73,6 +76,7 @@ if (Test-Path $runtimeConfigPath) {
 }
 
 # CLI overrides
+if ($Mod)                  { $cfg.mod             = $Mod }
 if ($Image)                { $cfg.image           = $Image }
 if ($Map)                  { $cfg.map             = $Map }
 if ($Ticks -gt 0)          { $cfg.ticks           = $Ticks }
@@ -115,6 +119,7 @@ Write-Host ""
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host " AiRENA Match (Bot vs Bot / Docker)"    -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
+Write-Host "[INFO] Mod:        $($cfg.mod)"
 Write-Host "[INFO] Image:      $($cfg.image)"
 Write-Host "[INFO] Map:        $($cfg.map)"
 Write-Host "[INFO] Ticks:      $($cfg.ticks)"
@@ -146,6 +151,7 @@ docker run --rm `
     -v "${dockerOutDir}:/artifacts/${matchId}" `
     $cfg.image `
     --match-id $matchId `
+    --mod $cfg.mod `
     --map $cfg.map `
     --ticks $cfg.ticks `
     --timeout $cfg.timeout_seconds `
