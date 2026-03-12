@@ -1,0 +1,9 @@
+{
+  "$comment": "Runtime configuration for smoke tests and bot-vs-bot matches.",
+  "image": "ghcr.io/tymsky/airena-openra-headless:latest",
+  "map": "a-nuclear-winter",
+  "ticks": 6000,
+  "opponent_ai": "normal",
+  "bot_faction": "",
+  "timeout_seconds": 300
+}

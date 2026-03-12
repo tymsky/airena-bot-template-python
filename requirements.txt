@@ -1,0 +1,4 @@
+# AiRENA SDK — protocol layer for openra.v1 bots.
+airena-sdk>=1.0.0
+
+# Add your own dependencies below if your bot needs them:

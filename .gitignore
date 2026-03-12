@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+*.egg-info/
+dist/
+build/
+.claude/
+
+# Nuitka build artifacts
+*.build/
+*.dist/
+*.onefile-build/
+
+# Artifacts are generated per-run, don't commit raw outputs
+artifacts/*
+!artifacts/.gitkeep
