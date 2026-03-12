@@ -1,6 +1,6 @@
 # AiRENA Bot Template (Python)
 
-[![PyPI](https://img.shields.io/pypi/v/airena-sdk?label=airena-sdk)](https://pypi.org/project/airena-sdk/)
+[![PyPI](https://img.shields.io/badge/airena--sdk-1.0.0-blue)](https://pypi.org/project/airena-sdk/)
 
 Starter template for building an AiRENA / OpenRA bot in Python.
 Supports mods: **ra** (Red Alert), **cnc** (Command & Conquer), **ts** (Tiberian Sun), **d2k** (Dune 2000). Default: `ra`.
