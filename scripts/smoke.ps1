@@ -88,8 +88,10 @@ if ($LASTEXITCODE -ne 0) {
     exit 3
 }
 
-# ---------- Check image exists ----------
+# ---------- Check image exists, pull if missing ----------
+$ErrorActionPreference = "Continue"
 $null = docker image inspect $cfg.image 2>&1
+$ErrorActionPreference = "Stop"
 if ($LASTEXITCODE -ne 0) {
     Write-Host "[WARN] Docker image '$($cfg.image)' not found locally." -ForegroundColor Yellow
     Write-Host "[INFO] Pulling image..." -ForegroundColor Cyan
